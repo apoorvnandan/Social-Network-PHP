@@ -2,8 +2,8 @@
 session_start();
 $dbhost = 'localhost';
 $dbname = 'chatappdb';
-$dbuser = 'socials';
-$dbpass = 'socialpassword';
+$dbuser = 'root';
+$dbpass = '';
 $appname= 'CHATAPP';
 
 $connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
