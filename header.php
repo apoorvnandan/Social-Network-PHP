@@ -14,13 +14,13 @@ if(isset($_SESSION['user']))
 			<li><a href='timeline.php'>Home</a></li>
 			<li><a href='messages.php'>Messages</a></li>
 			<li><a href='profile.php'>Profile</a></li>
-			<li><a href='logout.php'>Log Out</a></li>
+			<li><a href='index.php'>Log Out</a></li>
 		</ul>
 _END;
 }
 else
 {
-	die("You are logged out. Click <a href='index.php'>here</a>.");
+	header("Location: index.php");
 }
 
 ?>

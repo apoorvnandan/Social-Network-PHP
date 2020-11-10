@@ -74,7 +74,7 @@ if(isset($_FILES['gallerypic']['name']))
 }
 
 ?>
-<!-- 
+ 
 <form method='post' action='profile.php' enctype='multipart/form-data'>
 	Profile picture: <input type='file' name='profilepic' size='14'><br>
 	<input type='submit' value='Save'>
@@ -83,7 +83,7 @@ if(isset($_FILES['gallerypic']['name']))
 	Add a picture: <input type='file' name='gallerypic' size='14'><br>
 	<input type='submit' value="Save">
 </form>
- -->
+ 
 
 
 <?php

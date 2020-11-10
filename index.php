@@ -1,12 +1,12 @@
 <?php
 require_once 'functions.php';
 
-// if(isset($_SESSION['user']))
-// {
-// 	die("You are logged in as " + $_SESSION['user'] + ". <a href='timeline.php'>Click here</a> to continue.");
-// }
+if(isset($_SESSION['user']))
+{
+	session_destroy();
+}
 
-$error = $user = $pass = $pass1 = "";
+$response = $user = $pass = $pass1 = "";
 
 if(isset($_POST['signuser']))
 {
@@ -15,23 +15,23 @@ if(isset($_POST['signuser']))
 	$pass1 = cleanup($_POST['signrepass']);
 	if($user == "" || $pass == "" || $pass1 == "")
 	{
-		$error = "Not all fields were entered<br>";
+		$response = "Not all fields were entered";
 	}
 	else if ($pass != $pass1) 
 	{
-		$error = "passwords do not match<br>";
+		$response = "Passwords do not match";
 	}
 	else
 	{
 		$result = runthis("SELECT * FROM members WHERE user = '$user'");
 		if($result->num_rows)
 		{
-			$error = "username already exists";
+			$response = "Username already exists";
 		}
 		else
 		{
 			runthis("INSERT INTO members VALUES('$user', '$pass')");
-			die("Account created. Please <a href='index.php'>Log In</a>")	;
+			$response = "Account created. Please log in"	;
 		}
 	}
 }
@@ -42,20 +42,20 @@ if(isset($_POST['loginuser']))
 	$pass = cleanup($_POST['loginpass']);
 	if($user == "" || $pass == "")
 	{
-		$error = "Not all fields were entered<br>";
+		$response = "Not all fields were entered";
 	}
 	else
 	{
 		$result = runthis("SELECT user,pass FROM members WHERE user='$user' AND pass='$pass'");
 		if($result->num_rows == 0)
 		{
-			$error = 'username or password is wrong';
+			$response = 'Username or password is wrong';
 		}
 		else
 		{
 			$_SESSION['user'] = $user;
 			$_SESSION['pass'] = $pass;
-			die("You are now logged in. Please <a href='timeline.php'>click here</a> to continue.")	;
+			header("Location: timeline.php");
 		}
 	}
 }
@@ -65,11 +65,12 @@ if(isset($_POST['loginuser']))
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PHP App</title>
+    <title>Facebark</title>
 </head>
 <body>
-Welcome to this website!<br>
-Login<br>
+<div>Welcome to Facebark!</div>
+<br><?php echo $response ?><br>
+<br>Login<br>
 <form method="post" action="index.php">
 username: <input type="text" name="loginuser"><br>
 password: <input type="password" name="loginpass"><br>
