@@ -65,6 +65,7 @@ if(isset($_POST['loginuser']))
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="./icon/universedoge.jpg">
     <title>Facebark</title>
 </head>
 <body>
