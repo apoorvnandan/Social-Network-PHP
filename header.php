@@ -13,8 +13,6 @@ if(isset($_SESSION['user']))
 		<body>
 		<ul class='topbar'>
 			<li><a href='timeline.php'>Home</a></li>
-			<li><a href='messages.php'>Messages</a></li>
-			<li><a href='profile.php'>Profile</a></li>
 			<li><a href='index.php'>Log Out</a></li>
 		</ul>
 _END;

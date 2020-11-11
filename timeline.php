@@ -1,59 +1,93 @@
 <?php
 require_once 'header.php';
 $user = $_SESSION['user'];
+$user_id = $_SESSION['user_id'];
 echo "<div class='postcontainer'>";
 echo "<div class='timelineform'>";
-echo "<br>Welcome <strong>$user</strong>.<br><br>";
+echo "<br>Welcome <strong>$user</strong>. Fill out the form below to create a profile for your dog:<br><br>";
+$response = "";
 
-if(isset($_POST['content']) && isset($_FILES['photo']['name']))
+if(isset($_POST['createprofile']))
 {
-	$getcount = runthis("SELECT * FROM photos WHERE user='$user'");
-	$getcountrow = $getcount->fetch_array(MYSQLI_ASSOC);
-	$count = $getcountrow['count'];
-	$count = $count + 1;
-	$saveto = "pics/" . $user . "pic" . $count . ".jpg";
-	$detectedType = exif_imagetype($_FILES['photo']['tmp_name']);
-	$allowedTypes = array(IMAGETYPE_JPEG, IMAGETYPE_PNG);
-	if(in_array($detectedType, $allowedTypes))
+	$name = cleanup($_POST['name']);
+	$interests = cleanup($_POST['interests']);
+	$breed = cleanup($_POST['breed']);
+    $dob = cleanup($_POST['dob']);
+    $gender = cleanup($_POST['gender']);
+	if($name  == "" || $breed == "" || $dob == "" || $gender == "")
 	{
-		move_uploaded_file($_FILES['photo']['tmp_name'], $saveto);
-		runthis("UPDATE photos SET count='$count' WHERE user='$user'");
-		$content = cleanup($_POST['content']);
-		runthis("INSERT INTO posts VALUES('$user', '$content', 0, NULL, '$saveto')");
-
+		$response = "Not all required fields were entered";
 	}
 	else
 	{
-		echo "Error: file type must be .jpg or .png";
+            $current_date = date("Y/m/d");
+			runthis("INSERT INTO Owner_Has_Dog VALUES('$current_date',
+                    null,
+                    '$name', 
+                    '$interests',
+                    '$breed',
+                    '$dob',
+                    '$gender',
+                    '$user_id')");
+			$response = "Your dog <b>". $name."</b>'s profile is created on " .$current_date;
+		
 	}
 }
+
 ?>
 
 <form method='post' action='timeline.php' enctype='multipart/form-data'>
-<label class='fileinput'>Upload a photo<input type='file' name='photo' style='display:none;'></label><br>
-<input id='describe' type='text' name='content' placeholder='Write something about it...'>
-<input class='submitbutton' type='submit' value='Post'>
-</form>
-</div>
 
+<label>Name<span class="required"> *</span></label><br><br>
+<input class='text_field' type='text' name='name' placeholder=''><br><br>
+
+<label>Interests</label><br><br>
+<input class='text_field' type='text' name='interests' placeholder=''><br><br>
+<label>Breed<span class="required"> *</span></label><br><br>
+<input class='text_field' type='text' name='breed' placeholder=''><br><br>
+
+<label>Date of birth<span class="required"> *</span></label><br><br>
+<input class='text_field' type='date' name='dob' placeholder=''><br><br>
+
+<label>Gender<span class="required"> *</span></label><br><br>
+<select class='text_field' name='gender'>
+  <option value="Male">Male</option>
+  <option value="Female">Female</option>
+  <option value="Other" selected="selected">Other</option>
+</select>
+<br><br>
+
+<input type="hidden" name="createprofile" value="createprofile"> 
+<input class='submitbutton' type='submit' value='Create Dog Profile'>
+</form>
+
+<div> <?php echo $response ?></div>
+<br>Here are your dogs' profiles:<br><br>
+<table id="dog_profiles">
+<tr>
+    <th>Name</th>
+    <th>Gender</th>
+    <th>Breed</th>
+    <th>Date of birth</th>
+    <th>Profile</th>
+</tr>
 <?php
-$result = runthis('SELECT * FROM posts ORDER BY ID DESC');
-$n = $result->num_rows;
-for($j = 0; $j < $n; $j++)
-{
-	$row = $result->fetch_array(MYSQLI_ASSOC);
-	$author = $row['author'];
-	$addr = $row['photo'];
-	$content = $row['content'];
-	$upvotes = $row['upvotes'];
-	echo "<div class='post'><div class='authorbar'>" .
-			"<img src='$author.jpg' class='usericon'>" .
-			"<span><a href='profile.php?view=$author'><strong>$author</strong></a></span>" . "</div>" .
-			"<img src='$addr' style='height:600px; width:600px;'>" .  
-			"<div class='commentbar'>$content<br><br>$upvotes upvotes</div>" .
-		"</div>";
+$result = runthis("SELECT * FROM Owner_Has_Dog WHERE user_id ='$user_id'");
+while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+    echo "<tr>";
+    $d_id= $row["d_id"];
+    $name = $row["name"];
+    $gender = $row["gender"];
+    $breed = $row["breed"];
+    $dob = $row["DOB"];
+    echo "<td>".$name."</td>";
+    echo "<td>".$gender."</td>";
+    echo "<td>".$breed."</td>";
+    echo "<td>".$dob."</td>";
+    echo "<td><a class='submitbutton' href='profile.php?d_id=".$d_id."'>".$name."'s Profile Page</a></td>";
+    echo "</tr>";
 }
 ?>
-</div>
+</table>
 </body>
 </html>
