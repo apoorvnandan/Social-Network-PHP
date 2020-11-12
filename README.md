@@ -1,5 +1,5 @@
 # Introduction
-I made this project to learn PHP and explore the challenges of building a social networking website from scratch. Its an Instagram clone with all the basic features. Some features are yet to be added and there is a lot of scope for improvement in performance and scalability.
+We made this project to learn PHP and explore the challenges of building a social networking website from scratch. Its an Instagram clone with all the basic features. Some features are yet to be added and there is a lot of scope for improvement in performance and scalability.
 
 # Features
 - Upload photos with descriptions

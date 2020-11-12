@@ -84,12 +84,25 @@ body {
 	margin-bottom: 15px;
 }
 
-#describe {
+.text_field {
 	background-color: #FAFAFA;
 	border: 1px solid #e6e6e6;
 	color: #262626;
-	padding: 10px;
+	padding: 3px;
+}
 
+th, td{
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
+#dog_profiles {
+        width: 100%;
+}
+
+
+.required {
+    color: red;
 }
 
 .timelineform {
@@ -112,6 +125,12 @@ body {
 	border-radius: 5px;
 	border: none;
 	margin-bottom: 15px;
+}
+
+.submitbutton:hover {
+	background-color: #2d80ce;
+    cursor: pointer;
+	
 }
 
 .profilecontainer {

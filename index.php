@@ -23,14 +23,14 @@ if(isset($_POST['signuser'])) //sign up, using POST method
 	}
 	else
 	{
-		$result = runthis("SELECT * FROM members WHERE user = '$user'");
+		$result = runthis("SELECT * FROM Owner WHERE user_name = '$user'");
 		if($result->num_rows)
 		{
 			$response = "Username already exists";
 		}
 		else
 		{
-			runthis("INSERT INTO members VALUES('$user', '$pass')");
+			runthis("INSERT INTO Owner VALUES(null,'$user', '$pass')");
 			$response = "Account created. Please log in"	;
 		}
 	}
@@ -46,15 +46,19 @@ if(isset($_POST['loginuser'])) //login, using POST method
 	}
 	else
 	{
-		$result = runthis("SELECT user,pass FROM members WHERE user='$user' AND pass='$pass'");
+		$result = runthis("SELECT * FROM Owner WHERE user_name='$user' AND password='$pass'");
 		if($result->num_rows == 0)
 		{
 			$response = 'Username or password is wrong';
 		}
 		else
 		{
-			$_SESSION['user'] = $user;
-			$_SESSION['pass'] = $pass;
+            while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+                $_SESSION['user_id'] = $row['user_id'];
+                $_SESSION['user'] = $row['user_name'];
+			    $_SESSION['pass'] = $row['password'];
+            }
+			
 			header("Location: timeline.php");
 		}
 	}
