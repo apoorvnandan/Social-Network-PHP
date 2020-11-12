@@ -52,7 +52,9 @@ runthis('CREATE TABLE Dog_Has_Personal_Note (
   since           DATE        NOT NULL,
   sender_id       INT         NOT NULL,
   note_id         INT         PRIMARY KEY AUTO_INCREMENT,
-  FOREIGN KEY(d_id, sender_id) REFERENCES Owner_Has_Dog(d_id)
+  FOREIGN KEY(d_id) REFERENCES Owner_Has_Dog(d_id)
+      ON DELETE CASCADE,
+  FOREIGN KEY(sender_id) REFERENCES Owner_Has_Dog(d_id)
       ON DELETE CASCADE
 )
 ');
@@ -62,7 +64,9 @@ runthis('CREATE TABLE Matches (
   d2_id       INT,
   start_date  DATE,
   PRIMARY KEY (d1_id, d2_id),
-  FOREIGN KEY (d1_id, d2_id) REFERENCES Owner_Has_Dog(d_id)
+  FOREIGN KEY (d1_id) REFERENCES Owner_Has_Dog(d_id)
+      ON DELETE CASCADE,
+  FOREIGN KEY (d2_id) REFERENCES Owner_Has_Dog(d_id)
       ON DELETE CASCADE
 )
 ');
