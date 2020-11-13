@@ -4,7 +4,7 @@ $user = $_SESSION['user'];
 $user_id = $_SESSION['user_id'];
 echo "<div class='postcontainer'>";
 echo "<div class='timelineform'>";
-echo "<br>Welcome <strong>$user</strong>. Fill out the form below to create a profile for your dog:<br><br>";
+echo "<div style='display:inline;'><br>Welcome <strong>$user</strong>. Fill out the form below to create a profile for your dog:<br><br></div>";
 $response = "";
 
 if(isset($_POST['createprofile']))
@@ -45,7 +45,6 @@ if(isset($_POST['createprofile']))
 });
 </script>
 <body>
-
 <form method='post' action='timeline.php' enctype='multipart/form-data'>
 
 <div class='set'>
