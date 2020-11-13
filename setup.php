@@ -170,5 +170,5 @@ runthis('CREATE TABLE Group_Types (
 
     
 // /****DO NOT INSERT AFTER THIS******/    
-// echo 'tables created';
-// ?>
+echo 'tables created';
+ ?>

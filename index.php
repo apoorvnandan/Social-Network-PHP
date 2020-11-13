@@ -59,7 +59,7 @@ if(isset($_POST['loginuser'])) //login, using POST method
 			    $_SESSION['pass'] = $row['password'];
             }
 			
-			header("Location: timeline.php");
+			header("Location: header.php");
 		}
 	}
 }

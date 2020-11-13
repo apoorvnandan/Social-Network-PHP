@@ -7,22 +7,43 @@ a {
 	margin-top: 0px;
 	margin-left: auto;
 	margin-right: auto;
-	background-color: #FFFFFF;
-	border-bottom: 1px solid #e6e6e6;
-	height: 76px;
+	background-color: #83cdc5;
+	height: 125px;
 	display: flex;
 	align-items: center;
 }
 
-.topbar > li > a {
-	text-decoration: none;
-	color: #262626;
-	font-style: normal;
+#logo{
+	height: 100px;
+	width: 100px;
+	padding-left: 30px;
 }
 
-ul.topbar {
-	list-style: none;
+h1{
+	padding-left: 20px;
+	color: #365b6d;
+	float: left;
+
 }
+
+ul.toolbar {
+	display: block;
+	float: right;
+	margin-top: 0px;
+	overflow: hidden;
+}
+
+.toolbar-li{
+	padding: 25px;
+}
+
+.toolbar-li> li > a {
+	text-decoration: none;
+	color: #ffffff;
+	font-style: normal;
+	font-size: 20px;
+}
+
 
 li {
 	margin-right: 15px;
@@ -39,7 +60,7 @@ body {
 	color: #262626;
 	margin: 0px;
 	background-color: #FAFAFA;
-	font-family: "Roboto";
+	font-family: Tahoma, Geneva, sans-serif;
 }
 
 .post {

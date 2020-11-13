@@ -1,26 +1,34 @@
 <?php
 require_once 'functions.php';
 
-if(isset($_SESSION['user']))
+if(!isset($_SESSION['user']))
 {
-	echo <<<_END
-		<!DOCTYPE html>
+	//header("Location: index.php"); //commented our for testing
+}
+?>
+
+<!DOCTYPE html>
 		<html>
 		<head>
             <link rel="icon" href="./icon/universedoge.jpg">
-			<link rel="stylesheet" type="text/css" href="style.css">
+			<link rel="stylesheet" type="text/css" href="header-style.css">
 		</head>	
 		<body>
-		<ul class='topbar'>
-			<li><a href='timeline.php'>Home</a></li>
-			<li><a href='index.php'>Log Out</a></li>
-		</ul>
-_END;
-}
-else
-{
-	header("Location: index.php");
-}
-
-?>
+		<div class="topbar">
+		<img id="logo" src="./pics/doggo.png" alt="dog">
+		<h1>Facebark</h1>
+		<ul class='toolbar'>
+			<div class='toolbar-li'>
+			<li>
+				<a href='timeline.php'><img src="./pics/house.png" style="width:50px;height:50px;"/> 
+				<span>Home</span>
+				</a>
+			</li>
+			<li>
+				<a href='index.php'><img src="./pics/paw.png" style="width:50px;height:50px;"/> 
+				<span>Log Out</span>
+				</a>
+			</li>
+</div>
+</div>
 <script src='js/jquery.min.js'></script>
