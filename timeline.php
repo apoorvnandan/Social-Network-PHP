@@ -44,27 +44,41 @@ if(isset($_POST['createprofile']))
 	$('.welcome-message').hide();
 });
 </script>
+<body>
+
 <form method='post' action='timeline.php' enctype='multipart/form-data'>
 
-<label>Name<span class="required"> *</span></label><br><br>
-<input class='text_field' type='text' name='name' placeholder=''><br><br>
-
-<label>Interests</label><br><br>
-<input class='text_field' type='text' name='interests' placeholder=''><br><br>
-<label>Breed<span class="required"> *</span></label><br><br>
-<input class='text_field' type='text' name='breed' placeholder=''><br><br>
-
-<label>Date of birth<span class="required"> *</span></label><br><br>
-<input class='text_field' type='date' name='dob' placeholder=''><br><br>
-
-<label>Gender<span class="required"> *</span></label><br><br>
+<div class='set'>
+    <div >
+    <label>Name<span class="required"> *</span></label>
+    <input class='text_field' type='text' name='name' placeholder=''>
+    </div>
+    <div >
+    <label>Breed<span class="required"> *</span></label>  
+    <input class='text_field' type='text' name='breed' placeholder=''>
+    </div>
+</div>
+<div class='set'>
+    <div >
+    <label>Date of birth<span class="required"> *</span></label>
+    <input class='text_field' type='date' name='dob' placeholder=''>
+</div>
+<div>
+    <label>Gender<span class="required"> *</span></label>
 <select class='text_field' name='gender'>
   <option value="Male">Male</option>
   <option value="Female">Female</option>
   <option value="Other" selected="selected">Other</option>
 </select>
+</div>
+</div>
+<div class='set'>
+    <div>
+    <label>Interests</label>
+    <input class='text_field' type='text' name='interests' placeholder=''>  
+</div>  
+</div>
 <br><br>
-
 <input type="hidden" name="createprofile" value="createprofile"> 
 <input class='submitbutton' type='submit' value='Create Dog Profile'>
 </form>
