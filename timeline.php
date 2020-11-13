@@ -35,7 +35,15 @@ if(isset($_POST['createprofile']))
 }
 
 ?>
-
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" type="text/css" href="timeline.css">
+<script src='js/jquery.min.js'></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+	$('.welcome-message').hide();
+});
+</script>
 <form method='post' action='timeline.php' enctype='multipart/form-data'>
 
 <label>Name<span class="required"> *</span></label><br><br>
