@@ -110,11 +110,12 @@ if($posts_result->num_rows == 0)
     echo"<div style='color:gray;'>Your profile has no post. Add some!</div>";
 }
 while($row = $posts_result->fetch_array(MYSQLI_ASSOC)) {
+    $date = new DateTime();
     echo "<div class='post'>";
     $post_id= $row["post_id"];
     $caption = $row["text"];
     $num_likes = $row["num_likes"];
-    echo "<img class='postpic' src='./pics/$post_id.jpg'><br><br>";
+    echo "<img class='postpic' src='./pics/$post_id.jpg?".$date->getTimestamp()."'><br><br>";
     echo "<div style='width: 400px; margin: 0px 10px; text-align: left;'>";
     echo "<i id='like_button' class='fa fa-paw' aria-hidden='true'></i>";
     echo "<div>".$num_likes." likes </div><br>Caption: ".$caption. "</div>";
