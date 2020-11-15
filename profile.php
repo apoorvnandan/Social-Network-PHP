@@ -1,147 +1,140 @@
 <?php
 
 require_once "header.php";
-$user = "";
-$currentuser = "";
-$otheruser = 0;
-$isFollowing = 0;
-if(isset($_GET['view'])) 
+$d_id = null;
+$profile_result = "";
+$introduction = "";
+$since = "";
+$profile_id = null;
+
+// Set profile page based on d_id
+if(isset($_GET['d_id'])) 
 {
-	$user = $_GET['view'];
-	$currentuser = $_SESSION['user'];
-	$otheruser = 1;
-	$followstatus = runthis("SELECT * FROM follower WHERE user1='$currentuser' AND user2='$user'");
-	if($followstatus->num_rows == 0) 
-	{
-		$isFollowing = 0;
-	}
-	else 
-	{
-		$isFollowing = 1;
-	}
+	$d_id = $_GET['d_id'];
+	$profile_result = runthis("SELECT * FROM Dog_Has_Profile_Page WHERE d_id='$d_id'");
+    if($profile_result->num_rows == 0)
+    {
+        header("Location: timeline.php");
+    }
+    else
+    {
+            $row = $profile_result->fetch_array(MYSQLI_ASSOC);
+            $introduction = $row['introduction'];
+            $since = $row['since'];
+            $profile_id = $row['profile_id'];
+    }
 	
 }
 else
 {
-	$user = $_SESSION['user'];
-	$otheruser = 0;
+	header("Location: timeline.php");
 }
-echo "<div class='profilecontainer'>";
-echo "<div class='profiledescription'>";
-if(file_exists("$user.jpg"))
-{
-	echo "<img class='profilepic' src='$user.jpg'>";
-}
-echo "<span>$user";
-if($otheruser == 1)
-{
-	if($isFollowing == 0)
-	{
-		echo " <button id='followbutton' class='submitbutton' onclick='follow()'>Follow</button>";
-	}
-	else
-	{
-		echo " <button id='followbutton' class='submitbutton' onclick='follow()'>Unfollow</button>";
-	}
-}
-echo "</span></div>";
 
-if(isset($_FILES['profilepic']['name']))
+// Set Profile picture
+if(isset($_FILES['profilepic']['name']) && $_FILES['profilepic']['name'] != "")
 {
 	$detectedType = exif_imagetype($_FILES['profilepic']['tmp_name']);
 	$allowedTypes = array(IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_GIF);
 	if(in_array($detectedType, $allowedTypes))
 	{
-		move_uploaded_file($_FILES['profilepic']['tmp_name'], "$user.jpg");
+		move_uploaded_file($_FILES['profilepic']['tmp_name'], "./profilepic/$d_id.jpg");
 	}
+} else {
+    if(isset($_POST['deleteprofilepic']) && $_POST['deleteprofilepic'] == 'doit') {
+        if(file_exists("./profilepic/$d_id.jpg"))
+        {  
+            unlink("./profilepic/$d_id.jpg");
+        }
+    }
+    
 }
 
-if(isset($_FILES['gallerypic']['name']))
+// Set posts
+if(isset($_FILES['gallerypic']['name']) && $_FILES['gallerypic']['tmp_name'] != '')
 {
 	$detectedType = exif_imagetype($_FILES['gallerypic']['tmp_name']);
 	$allowedTypes = array(IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_GIF);
-	$result = runthis("SELECT * FROM photos WHERE user='$user'");
-	$row = $result->fetch_array(MYSQLI_ASSOC);
-	$count = $row['count'];
-	$count = $count + 1;
-	$saveto = "pics/" . $user . "pic" . $count . ".jpg";
 	if(in_array($detectedType, $allowedTypes))
 	{
+        $text = '';
+        if(isset($_POST['caption'])) {
+            $text = $_POST['caption'];
+        }
+        runthis("INSERT INTO Profile_Page_Contains_Post  VALUES(null,
+        null,
+        '$text', 
+        0,
+        '$profile_id')");
+        $post_id = mysqli_insert_id($connection);
+        $saveto = "pics/" . $post_id.".jpg";
 		move_uploaded_file($_FILES['gallerypic']['tmp_name'], $saveto);
-		runthis("UPDATE photos SET count='$count' WHERE user = '$user'");
+
 	}
 
 }
 
+echo "<div class='profilecontainer'>";
+$date = new DateTime();
+if(file_exists("./profilepic/$d_id.jpg"))
+{   
+	echo "<img class='profilepic' src='./profilepic/$d_id.jpg?".$date->getTimestamp()."'><br>";
+} else {
+    echo "<img class='profilepic' src='./profilepic/default.jpg'><br>";
+}
+echo "<form method='post' action='profile.php?d_id=".$d_id."' enctype='multipart/form-data'>
+    <img id='changepicbutton' class='profilepicbutton' src='./img/camera.png'>
+    <img id='droppicbutton' class='profilepicbutton' src='./img/x.png'>
+    
+    <input id='deleteprofilepic' type='text' name='deleteprofilepic' value='' style='display:none;'>
+    <input id='inputprofilepic' type='file' name='profilepic' style='display:none;'>
+	<input id='submitprofilepic' type='submit' style='display:none;' value='Save'>
+</form>";
+echo $introduction;
+echo " <hr><br>
+ <br>
+ <div id='postdiv'>
+<form method='post' action='profile.php?d_id=".$d_id."' enctype='multipart/form-data'>
+	Add a picture: <input type='file' name='gallerypic' size='14'>
+    <br>
+    <br>
+    <input class='text_field' type='text' name='caption' placeholder='Write your caption here...'><br><br>
+	<input type='submit' value='POST'>
+</form></div>";
+echo "<br>";
+echo "<br>";
+echo "<div style='width: 400px; margin: 0px auto; text-align: left;'>My posts: </div>";
+// Display posts
+$posts_result = runthis("SELECT * FROM Profile_Page_Contains_Post WHERE profile_id='$profile_id'");
+if($posts_result->num_rows == 0)
+{
+    echo"<div style='color:gray;'>Your profile has no post. Add some!</div>";
+}
+while($row = $posts_result->fetch_array(MYSQLI_ASSOC)) {
+    echo "<div class='post'>";
+    $post_id= $row["post_id"];
+    $caption = $row["text"];
+    $num_likes = $row["num_likes"];
+    echo "<img class='postpic' src='./pics/$post_id.jpg'><br><br>";
+    echo "<div style='width: 400px; margin: 0px 10px; text-align: left;'>";
+    echo "<i id='like_button' class='fa fa-paw' aria-hidden='true'></i>";
+    echo "<div>".$num_likes." likes </div><br>Caption: ".$caption. "</div>";
+    echo "</div>";
+}
+echo "</div><br><br>";
+echo "<div style='position:relative; height:100%;'><div id='footer'>Profile created since ".$since."</div></div>";
 ?>
- 
-<form method='post' action='profile.php' enctype='multipart/form-data'>
-	Profile picture: <input type='file' name='profilepic' size='14'><br>
-	<input type='submit' value='Save'>
-</form>
-<form method='post' action='profile.php' enctype='multipart/form-data'>
-	Add a picture: <input type='file' name='gallerypic' size='14'><br>
-	<input type='submit' value="Save">
-</form>
- 
-
-
-<?php
-
-	$result = runthis("SELECT * FROM photos WHERE user='$user'");
-	$row = $result->fetch_array(MYSQLI_ASSOC);
-	$num = $row['count'];
-	for($j = 1; $j <= $num; $j = $j + 1)
-	{
-		$addr = "pics/" . $user . "pic" . $j . ".jpg";
-		if($j % 3 != 0)
-			echo "<img class='gridpic' src='$addr'>";
-		else
-			echo "<img class='gridpiclast' src='$addr'>";
-	}
-
-?>
-</div>
 </body>
 <script>
-let buttonUsed = 0;
-function follow()
-{
-	buttonUsed = 1 - buttonUsed;
-	let user1 = "<?php echo $currentuser ?>";
-	let user2 = "<?php echo $user ?>";
-	let isFollowing = <?php echo $isFollowing ?>;
+$("#changepicbutton").click(function () {
+    $("#inputprofilepic").click();
+});
+    
+$("#droppicbutton").click(function () {
+    $("#deleteprofilepic").val("doit");
+    $("#submitprofilepic").click();
+});
+    
+$('#inputprofilepic').on("change", function(){  $("#submitprofilepic").click(); });
 
-	console.log(isFollowing);
-	$.ajax({
-		url: "ajax/follow.php",
-		type: "post",
-		data: {'user1': user1, 'user2': user2, 'isFollowing': isFollowing},
-		success: function(data, status) {
-			console.log(data);
-			if(data == "OK")
-			{
-				
-				if(isFollowing == 0)
-				{
-					$('#followbutton').html('Unfollow');
-				}
-				else
-				{
-					$('#followbutton').html('Follow');
-				}
-				if(buttonUsed == 1)
-				{
-					isFollowing = (1 - isFollowing);
-				}
-			}
-
-		},
-		error: function(xhr, desc, err) {
-			console.log(xhr);
-			console.log("Details: " + desc + " Error: " + err);
-		}
-	});	
-}
 </script>
 </html>

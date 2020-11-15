@@ -25,7 +25,7 @@ runthis('CREATE TABLE Owner (
 ');
 runthis('CREATE TABLE Owner_Has_Dog (
     since        DATE,
-    d_id        INT            PRIMARY KEY AUTO_INCREMENT,
+    d_id        VARCHAR(20)            PRIMARY KEY,
     name        VARCHAR(20)    NOT NULL,
     interest    VARCHAR(32),
     breed        VARCHAR(11)        NOT NULL,
@@ -41,16 +41,16 @@ runthis('CREATE TABLE Owner_Has_Dog (
    introduction    TINYTEXT,
    profile_pics    BLOB,
    profile_id      INT           PRIMARY KEY AUTO_INCREMENT,
-   d_id            INT           NOT NULL,
+   d_id            VARCHAR(20)           NOT NULL,
    FOREIGN KEY(d_id) REFERENCES Owner_Has_Dog(d_id)
        ON DELETE CASCADE
  )
  ');
 
  runthis('CREATE TABLE Dog_Has_Personal_Note (
-   d_id            INT         NOT NULL,
+   d_id            VARCHAR(20)         NOT NULL,
    since           DATE        NOT NULL,
-   sender_id       INT         NOT NULL,
+   sender_id       VARCHAR(20)         NOT NULL,
    note_id         INT         PRIMARY KEY AUTO_INCREMENT,
    FOREIGN KEY(d_id) REFERENCES Owner_Has_Dog(d_id)
        ON DELETE CASCADE,
@@ -60,8 +60,8 @@ runthis('CREATE TABLE Owner_Has_Dog (
  ');
 
  runthis('CREATE TABLE Matches (
-   d1_id       INT,
-   d2_id       INT,
+   d1_id       VARCHAR(20),
+   d2_id       VARCHAR(20),
    start_date  DATE,
    PRIMARY KEY (d1_id, d2_id),
    FOREIGN KEY (d1_id) REFERENCES Owner_Has_Dog(d_id)
@@ -72,7 +72,7 @@ runthis('CREATE TABLE Owner_Has_Dog (
  ');
 
  runthis('CREATE TABLE Profile_Page_Contains_Post (
-   post_id             INT       PRIMARY KEY,
+   post_id             INT       PRIMARY KEY AUTO_INCREMENT,
    image               BLOB,
    text                TINYTEXT,
    num_likes           INT,
@@ -84,7 +84,7 @@ runthis('CREATE TABLE Owner_Has_Dog (
 
  runthis('CREATE TABLE Post_Contains_Comment (
    time_stamp        TIMESTAMP,
-   poster_id         INT,
+   poster_id         VARCHAR(20),
    text              TINYTEXT      NOT NULL,
    num_likes         INT,
    since             DATE,
@@ -127,7 +127,7 @@ runthis('CREATE TABLE Group_Types (
  ');
 
   runthis('CREATE TABLE Dog_Joins_Group (
-    d_id            INT,
+    d_id            VARCHAR(20),
     group_id        INT,
     since           DATE,
     PRIMARY KEY(d_id,group_id),
@@ -143,7 +143,7 @@ runthis('CREATE TABLE Group_Types (
    image               BLOB          NOT NULL,
    start_time          TIMESTAMP     NOT NULL,
    numViews            INT,
-   d_id                INT           NOT NULL,
+   d_id                VARCHAR(20)           NOT NULL,
    FOREIGN KEY(d_id) REFERENCES Owner_Has_Dog(d_id)
        ON DELETE CASCADE
  )
@@ -170,5 +170,5 @@ runthis('CREATE TABLE Group_Types (
 
     
 // /****DO NOT INSERT AFTER THIS******/    
-// echo 'tables created';
-// ?>
+echo 'tables created';
+?>
