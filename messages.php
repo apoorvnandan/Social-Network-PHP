@@ -9,19 +9,8 @@ if(isset($_POST['msgreciever']))
 	$msgreciever = $_POST['msgreciever'];
 	$msg = $_POST['msg'];
 	$msg = cleanup($msg);
-	if($msgreciever == "" || $msg == "")
+	if($msgreciever == "")
 	{
-<<<<<<< HEAD
-		$error = "You forgot the message or its reciever.";
-	}
-	else
-	{
-		$checkuser = runthis("SELECT * FROM members WHERE user='$msgreciever'");
-		if($checkuser->num_rows != 0)
-		{
-			runthis("INSERT INTO messages VALUES('$user', '$msgreciever', '$msg', 'date()')");
-			$error = "Message sent.";
-=======
 		echo "The reciever box cannot be empty";
 	}
 	 else if ($msg == "")
@@ -36,7 +25,6 @@ if(isset($_POST['msgreciever']))
 			$today = date("Y-m-d");
 			runthis("INSERT INTO Dog_Has_Personal_Note VALUES('$msgreciever', '$today', '$user' , '$msg', DEFAULT)");
 			echo "Message sent!";
->>>>>>> 8445209... updated messages + added content to notes table
 		}
 		else
 		{
@@ -58,16 +46,6 @@ Message: <input type='text' name='msg'><br>
 <div class='chatcontainer'></div>
 </div>
 <?php
-<<<<<<< HEAD
- $result = runthis("SELECT * FROM messages WHERE reciever='$user' OR sender='$user'");
-
- $n = $result->num_rows;
- for($j = 0; $j < $n; $j = $j + 1)
- {
- 	$row = $result->fetch_array(MYSQLI_ASSOC);	 
- 	echo "<div class='msg'>" . $row['sender'] . ": " . $row['content'] . "<br><br></div>";
- }
-=======
 	 echo "Your Messages:<br><br></div>" ;
 
 	  $result = runthis("SELECT * FROM Dog_Has_Personal_Note WHERE d_id='$user'");
@@ -90,7 +68,6 @@ Message: <input type='text' name='msg'><br>
       	echo "<div class='msg'>" . "To: " . $row['d_id'] . "<br>" . " Message: " . $row['content'] . "<br><br></div>";
 	  }
 
->>>>>>> 8445209... updated messages + added content to notes table
 
 ?>
 
