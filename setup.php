@@ -55,6 +55,7 @@ runthis('CREATE TABLE Owner_Has_Dog (
    d_id            VARCHAR(20)         NOT NULL,
    since           DATE        NOT NULL,
    sender_id       VARCHAR(20)         NOT NULL,
+   content         VARCHAR(250)        NOT NULL,
    note_id         INT         PRIMARY KEY AUTO_INCREMENT,
    FOREIGN KEY(d_id) REFERENCES Owner_Has_Dog(d_id)
        ON DELETE CASCADE,
