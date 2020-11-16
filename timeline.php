@@ -99,7 +99,7 @@ if(isset($_POST['createprofile']))
     <th>Profile</th>
 </tr>
 <?php
-$result = runthis("SELECT * FROM Owner_Has_Dog WHERE user_id ='$user_id'");
+$result = runthis("SELECT d_id, name, gender, breed, DOB FROM Owner_Has_Dog WHERE user_id ='$user_id'");
 while($row = $result->fetch_array(MYSQLI_ASSOC)) {
     echo "<tr>";
     $d_id= $row["d_id"];
@@ -112,7 +112,7 @@ while($row = $result->fetch_array(MYSQLI_ASSOC)) {
     echo "<td>".$gender."</td>";
     echo "<td>".$breed."</td>";
     echo "<td>".$dob."</td>";
-    echo "<td><a class='submitbutton' href='profile.php?d_id=".$d_id."'>".$name."'s Profile Page</a></td>";
+    echo "<td><a class='submitbutton' href='profile.php?d_id=".$d_id."'>Profile Page</a></td>";
     echo "</tr>";
 }
 ?>

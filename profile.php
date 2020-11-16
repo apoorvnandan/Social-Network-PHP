@@ -115,10 +115,17 @@ while($row = $posts_result->fetch_array(MYSQLI_ASSOC)) {
     $post_id= $row["post_id"];
     $caption = $row["text"];
     $num_likes = $row["num_likes"];
-    echo "<img class='postpic' src='./pics/$post_id.jpg?".$date->getTimestamp()."'><br><br>";
+    if(file_exists("./pics/$post_id.jpg"))
+    {   
+        echo "<img class='postpic' src='./pics/$post_id.jpg?".$date->getTimestamp()."'><br><br>";
+    } else {
+        echo "<img class='postpic' src='./pics/defaultpost.jpg'><br>";
+    }
+    
     echo "<div style='width: 400px; margin: 0px 10px; text-align: left;'>";
-    echo "<i id='like_button' class='fa fa-paw' aria-hidden='true'></i>";
-    echo "<div>".$num_likes." likes </div><br>Caption: ".$caption. "</div>";
+//    echo "<i id='like_button' class='fa fa-paw' aria-hidden='true'></i>";
+//    echo "<div>".$num_likes." likes </div>"
+    echo"<br>Caption: ".$caption. "</div>";
     echo "</div>";
 }
 echo "</div><br><br>";

@@ -4,6 +4,10 @@
 <?php 
 
 require_once 'functions.php';
+$tables = array ("Owner", "Owner_Has_Dog", "Dog_Has_Profile_Page", "Dog_Has_Personal_Note",
+                "Matches", "Profile_Page_Contains_Post", "Post_Contains_Comment",
+                "Group_Types","Owner_Manages_Group", "Premium_User", "Premium_Swags","Premium_Profile_Page", "Dog_Joins_Group",
+                "Dog_Has_Highlights");
 /*****DROP ALL CURRENT TABLES, PLEASE DO NOT DELETE********/
 runthis('SET FOREIGN_KEY_CHECKS = 0');
 $result = runthis('SELECT CONCAT("DROP TABLE IF EXISTS `", table_schema, "`.`", table_name, "`;")
@@ -120,7 +124,7 @@ runthis('CREATE TABLE Group_Types (
 
  runthis('CREATE TABLE Premium_User (
    user_id         INT       PRIMARY KEY AUTO_INCREMENT,
-   payment_info     INT       NOT NULL,
+   payment_info     VARCHAR(30)       NOT NULL,
    FOREIGN KEY(user_id) REFERENCES Owner(user_id)
       ON DELETE CASCADE
  )
@@ -166,9 +170,18 @@ runthis('CREATE TABLE Group_Types (
  )
  ');
 
-// /****INSERT MORE BELOW******/
+// /****CREATE TABLE MORE BELOW******/
 
     
-// /****DO NOT INSERT AFTER THIS******/    
+// /****DO NOT CREATE TABLE AFTER THIS******/    
 echo 'tables created';
+echo '<br>';
+/*****INSERT STATEMENTS***************/
+for ($insert_id = 0; $insert_id < count($tables); $insert_id++) {
+    $filename = './data/'.$tables[$insert_id].".csv";
+    loadData($filename,$tables[$insert_id]);
+    echo $tables[$insert_id]." loaded";
+    echo "<br>";
+}
+echo 'data inserted';
 ?>
